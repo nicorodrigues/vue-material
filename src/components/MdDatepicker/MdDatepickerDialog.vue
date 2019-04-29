@@ -1,3 +1,4 @@
+
 <template>
   <md-popover :md-settings="popperSettings" md-active>
     <transition name="md-datepicker-dialog" appear @enter="setContentStyles" @after-leave="resetDate">
@@ -89,36 +90,32 @@
 </template>
 
 <script>
-  import addMonths from 'date-fns/addMonths'
-  import startOfMonth from 'date-fns/startOfMonth'
-  import subMonths from 'date-fns/subMonths'
-  import getDate from 'date-fns/getDate'
-  import getDay from 'date-fns/getDay'
-  import getDaysInMonth from 'date-fns/getDaysInMonth'
-  import getMonth from 'date-fns/getMonth'
-  import getYear from 'date-fns/getYear'
-  import isEqual from 'date-fns/isEqual'
-  import isSameDay from 'date-fns/isSameDay'
-  import setDate from 'date-fns/setDate'
-  import setMonth from 'date-fns/setMonth'
-  import setYear from 'date-fns/setYear'
-
+  import addMonths from 'date-fns/add_months'
+  import startOfMonth from 'date-fns/start_of_month'
+  import subMonths from 'date-fns/sub_months'
+  import getDate from 'date-fns/get_date'
+  import getDay from 'date-fns/get_day'
+  import getDaysInMonth from 'date-fns/get_days_in_month'
+  import getMonth from 'date-fns/get_month'
+  import getYear from 'date-fns/get_year'
+  import isEqual from 'date-fns/is_equal'
+  import isSameDay from 'date-fns/is_same_day'
+  import isToday from 'date-fns/is_today'
+  import setDate from 'date-fns/set_date'
+  import setMonth from 'date-fns/set_month'
+  import setYear from 'date-fns/set_year'
   import MdComponent from 'core/MdComponent'
   import MdPopover from 'components/MdPopover/MdPopover'
   import MdArrowRightIcon from 'core/icons/MdArrowRightIcon'
   import MdArrowLeftIcon from 'core/icons/MdArrowLeftIcon'
   import MdDialog from 'components/MdDialog/MdDialog'
-
   const daysInAWeek = 7
-
   const getElements = (el, selector) => {
     if (el && el.querySelector) {
       return el.querySelectorAll(selector)
     }
-
     return false
   }
-
   export default new MdComponent({
     name: 'MdDatepickerDialog',
     components: {
@@ -147,7 +144,7 @@
     computed: {
       firstDayOfAWeek () {
         // normalize
-        let firstDayOfAWeek = Number(this.locale.firstDayOfAWeek)
+        let firstDayOfAWeek = Number(this.$material.locale.firstDayOfAWeek)
         if (Number.isNaN(firstDayOfAWeek) || !Number.isFinite(firstDayOfAWeek)) {
           return 0
         }
@@ -156,7 +153,7 @@
         return firstDayOfAWeek
       },
       locale() {
-        return this.$material.locale
+        return this.$material.locale;
       },
       popperSettings () {
         return {
@@ -175,7 +172,6 @@
         if (this.monthAction === 'next') {
           return 'md-next'
         }
-
         return 'md-previous'
       },
       firstDayOfMonth () {
@@ -193,7 +189,6 @@
         if (this.selectedDate) {
           return getDate(this.selectedDate)
         }
-
         return getDate(this.currentDate)
       },
       currentMonth () {
@@ -209,21 +204,18 @@
         if (this.selectedDate) {
           return getYear(this.selectedDate)
         }
-
         return getYear(this.currentDate)
       },
       shortDayName () {
         if (this.selectedDate) {
           return this.locale.shortDays[getDay(this.selectedDate)]
         }
-
         return this.locale.shortDays[getDay(this.currentDate)]
       },
       shortMonthName () {
         if (this.selectedDate) {
           return this.locale.shortMonths[getMonth(this.selectedDate)]
         }
-
         return this.locale.shortMonths[getMonth(this.currentDate)]
       }
     },
@@ -243,7 +235,6 @@
         this.$nextTick().then(() => {
           if (this.currentView === 'year') {
             const activeYear = getElements(this.$el, '.md-datepicker-year-button.md-datepicker-selected')
-
             if (activeYear.length) {
               activeYear[0].scrollIntoView({
                 behavior: 'instant',
@@ -258,10 +249,8 @@
     methods: {
       setContentStyles () {
         const months = getElements(this.$el, '.md-datepicker-month')
-
         if (months.length) {
           const nextMonth = months[months.length - 1]
-
           this.contentStyles = {
             height: nextMonth.offsetHeight + 10 + 'px'
           }
@@ -271,11 +260,9 @@
         const { startYear, endYear } = this.locale
         let counter = startYear
         let years = []
-
         while (counter <= endYear) {
           years.push(counter++)
         }
-
         this.availableYears = years
       },
       handleDisabledDateByArray (date) {
@@ -284,7 +271,6 @@
       isDisabled (day) {
         if (this.mdDisabledDates) {
           const targetDate = setDate(this.currentDate, day)
-
           if (Array.isArray(this.mdDisabledDates)) {
             return this.handleDisabledDateByArray(targetDate)
           } else if (typeof this.mdDisabledDates === 'function') {
@@ -296,7 +282,7 @@
         return isEqual(this.selectedDate, setDate(this.currentDate, day))
       },
       isToday (day) {
-        return isSameDay(new Date(), setDate(this.currentDate, day))
+        return isToday(setDate(this.currentDate, day))
       },
       previousMonth () {
         this.monthAction = 'previous'
@@ -317,7 +303,6 @@
       selectDate (day) {
         this.currentDate = setDate(this.currentDate, day)
         this.selectedDate = this.currentDate
-
         if (this.mdImmediately) {
           this.$emit('update:mdDate', this.selectedDate)
           this.closeDialog()
@@ -353,10 +338,8 @@
   @import "~components/MdAnimation/variables";
   @import "~components/MdLayout/mixins";
   @import "~components/MdElevation/mixins";
-
   $md-calendar-width: 320px;
   $md-calendar-mobile-width: 296px;
-
   .md-datepicker-dialog {
     @include md-elevation(24);
     display: flex;
@@ -369,7 +352,6 @@
     transition: opacity .2s $md-transition-stand-timing,
                 transform .35s $md-transition-stand-timing;
     will-change: opacity, transform, left, top;
-
     @include md-layout-xsmall {
       flex-direction: column;
       top: 50% !important;
@@ -379,19 +361,15 @@
       position: fixed !important;
     }
   }
-
   .md-datepicker-dialog-leave-active {
     opacity: 0;
   }
-
   .md-datepicker-dialog-enter {
     opacity: 0;
     transform: scale(.9);
-
     @include md-layout-xsmall {
       transform: translate3D(-50%, -50%, 0) scale(.9);
     }
-
     .md-datepicker-body {
       .md-datepicker-calendar {
         opacity: 0;
@@ -399,16 +377,13 @@
       }
     }
   }
-
   .md-datepicker-header {
     min-width: 150px;
     padding: 16px;
-
     @include md-layout-xsmall {
       min-width: auto;
       padding: 16px 20px;
     }
-
     .md-datepicker-year-select {
       cursor: pointer;
       opacity: .54;
@@ -418,7 +393,6 @@
       letter-spacing: .01em;
       line-height: 24px;
     }
-
     .md-datepicker-date-select {
       cursor: pointer;
       opacity: .54;
@@ -428,36 +402,29 @@
       letter-spacing: 0;
       line-height: 1.2em;
     }
-
     .md-datepicker-dayname {
       display: block;
-
       @include md-layout-xsmall {
         display: inline-block;
       }
     }
-
     .md-selected {
       opacity: 1;
     }
   }
-
   .md-datepicker-body {
     width: $md-calendar-width;
     position: relative;
     overflow: hidden;
     transition: width .3s $md-transition-stand-timing;
     will-change: width;
-
     @include md-layout-xsmall {
       width: $md-calendar-mobile-width;
     }
-
     .md-button {
       margin: 0;
     }
   }
-
   .md-datepicker-body-header {
     padding: 8px;
     display: flex;
@@ -468,7 +435,6 @@
     right: 0;
     left: 0;
     pointer-events: none;
-
     &:before,
     &:after {
       width: 48px;
@@ -479,38 +445,31 @@
       pointer-events: none;
       content: " ";
     }
-
     &:after {
       left: 0;
     }
-
     &:before {
       right: 0;
     }
-
     .md-button {
       pointer-events: auto;
       z-index: 3;
     }
   }
-
   .md-datepicker-body-header-enter,
   .md-datepicker-body-header-leave-active {
     .md-button:first-child {
       transform: translate3d(-150%, 0, 0);
     }
-
     .md-button:last-child {
       transform: translate3d(150%, 0, 0);
     }
   }
-
   .md-datepicker-body-content {
     overflow: hidden;
     transition: height .35s $md-transition-default-timing;
     will-change: height;
   }
-
   .md-datepicker-panel {
     display: flex;
     position: absolute;
@@ -522,42 +481,34 @@
     transition-property: transform, opacity;
     will-change: transform, opacity;
   }
-
   .md-datepicker-calendar {
     &.md-datepicker-view-enter,
     &.md-datepicker-view-leave-active {
       transform: translate3d(0, 100%, 0);
     }
-
     &.md-previous {
       .md-datepicker-month-enter {
         transform: translate3D(-100%, 0, 0);
-
         .md-datepicker-month-trigger {
           transform: translate3D(-30%, 0, 0);
         }
       }
-
       .md-datepicker-month-leave-active {
         transform: translate3D(100%, 0, 0);
       }
     }
-
     &.md-next {
       .md-datepicker-month-enter {
         transform: translate3D(100%, 0, 0);
-
         .md-datepicker-month-trigger {
           transform: translate3D(30%, 0, 0);
         }
       }
-
       .md-datepicker-month-leave-active {
         transform: translate3D(-100%, 0, 0);
       }
     }
   }
-
   .md-datepicker-month {
     top: 8px;
     bottom: auto;
@@ -565,11 +516,9 @@
     transition: .35s $md-transition-default-timing;
     transition-property: transform, opacity;
     will-change: transform, opacity;
-
     @include md-layout-xsmall {
       padding: 0 6px;
     }
-
     .md-datepicker-month-trigger {
       min-height: 32px;
       margin: 0 46px 10px;
@@ -579,24 +528,19 @@
       will-change: transform;
     }
   }
-
   .md-datepicker-week {
     display: flex;
     align-items: center;
-
     span {
       flex: 1;
       font-size: 12px;
       text-align: center;
     }
   }
-
   .md-datepicker-days {
     $md-day-width: 100%;
-
     display: flex;
     flex-wrap: wrap;
-
     .md-datepicker-empty,
     .md-datepicker-day {
       margin: 1px 0;
@@ -605,10 +549,8 @@
       justify-content: center;
       flex: 0 1 $md-day-width / 7;
     }
-
     .md-datepicker-day-button {
       $width: 30px;
-
       width: $width;
       min-width: $width;
       height: $width;
@@ -618,20 +560,16 @@
       line-height: $width;
       text-align: center;
     }
-
     .md-datepicker-selected {
       font-weight: 700;
     }
-
     .md-datepicker-today {
       font-weight: 700;
     }
-
     .md-datepicker-disabled {
       pointer-events: none;
     }
   }
-
   .md-datepicker-month-selector {
     padding: 6px 8px 10px;
     flex-wrap: wrap;
@@ -639,19 +577,16 @@
     transition: .35s $md-transition-default-timing;
     transition-property: transform, opacity;
     will-change: transform, opacity;
-
     &.md-datepicker-view-enter,
     &.md-datepicker-view-leave-active {
       transform: translate3d(0, -100%, 0);
     }
-
     .md-datepicker-year-trigger {
       width: 100%;
       margin: 0 0 8px;
       flex: 1 1 100%;
     }
   }
-
   .md-datepicker-month-button,
   .md-datepicker-year-button {
     height: 36px;
@@ -663,32 +598,26 @@
     text-align: center;
     text-transform: uppercase;
   }
-
   .md-datepicker-month-button {
     flex: 1 1 33.3333%;
     border-radius: 2px;
     font-size: 13px;
   }
-
   .md-datepicker-year-selector {
     flex-direction: column;
     overflow: auto;
     bottom: 52px;
     border-bottom: 1px solid;
-
     &.md-datepicker-view-enter,
     &.md-datepicker-view-leave-active {
       transform: translate3d(0, -100%, 0);
     }
-
     .md-button {
       min-height: 36px;
     }
   }
-
   .md-datepicker-year-button {
     font-size: 16px;
-
     &.md-datepicker-selected {
       font-size: 24px;
     }
