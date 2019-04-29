@@ -24,7 +24,6 @@
   import isFirefox from 'is-firefox'
   import format from 'date-fns/format'
   import parse from 'date-fns/parse'
-  import isValid from 'date-fns/isValid'
   import MdPropValidator from 'core/utils/MdPropValidator'
   import MdOverlay from 'components/MdOverlay/MdOverlay'
   import MdDatepickerDialog from './MdDatepickerDialog'
@@ -107,7 +106,7 @@
         return Number.isInteger(this.value) && this.value >= 0
       },
       isModelTypeDate () {
-        return typeof this.value === 'object' && this.value instanceof Date && isValid(this.value)
+        return typeof this.value === 'object' && this.value instanceof Date
       },
       localString () {
         return this.localDate && format(this.localDate, this.dateFormat, {awareOfUnicodeTokens: true})
@@ -117,7 +116,7 @@
       },
       parsedInputDate () {
         const parsedDate = parse(this.inputDate, this.dateFormat, new Date(), {awareOfUnicodeTokens: true})
-        return parsedDate && isValid(parsedDate) ? parsedDate : null
+        return parsedDate || null
       },
       pattern () {
         return this.dateFormat.replace(/yyyy|MM|DD/g, match => {
@@ -213,11 +212,7 @@
         } else if (this.isModelTypeString) {
           let parsedDate = parse(this.value, this.dateFormat, new Date(), {awareOfUnicodeTokens: true})
 
-          if (isValid(parsedDate)) {
             this.localDate = parse(this.value, this.dateFormat, new Date(), {awareOfUnicodeTokens: true})
-          } else {
-            Vue.util.warn(`The datepicker value is not a valid date. Given value: ${this.value}, format: ${this.dateFormat}`)
-          }
         } else {
           Vue.util.warn(`The datepicker value is not a valid date. Given value: ${this.value}`)
         }

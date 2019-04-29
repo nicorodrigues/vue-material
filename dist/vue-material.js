@@ -5942,10 +5942,6 @@ var _parse = __webpack_require__(8);
 
 var _parse2 = _interopRequireDefault(_parse);
 
-var _isValid = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"date-fns/isValid\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
-
-var _isValid2 = _interopRequireDefault(_isValid);
-
 var _MdPropValidator = __webpack_require__(3);
 
 var _MdPropValidator2 = _interopRequireDefault(_MdPropValidator);
@@ -6049,7 +6045,7 @@ exports.default = {
       return Number.isInteger(this.value) && this.value >= 0;
     },
     isModelTypeDate: function isModelTypeDate() {
-      return _typeof(this.value) === 'object' && this.value instanceof Date && (0, _isValid2.default)(this.value);
+      return _typeof(this.value) === 'object' && this.value instanceof Date;
     },
     localString: function localString() {
       return this.localDate && (0, _format2.default)(this.localDate, this.dateFormat, { awareOfUnicodeTokens: true });
@@ -6059,7 +6055,7 @@ exports.default = {
     },
     parsedInputDate: function parsedInputDate() {
       var parsedDate = (0, _parse2.default)(this.inputDate, this.dateFormat, new Date(), { awareOfUnicodeTokens: true });
-      return parsedDate && (0, _isValid2.default)(parsedDate) ? parsedDate : null;
+      return parsedDate || null;
     },
     pattern: function pattern() {
       return this.dateFormat.replace(/yyyy|MM|DD/g, function (match) {
@@ -6156,11 +6152,7 @@ exports.default = {
       } else if (this.isModelTypeString) {
         var parsedDate = (0, _parse2.default)(this.value, this.dateFormat, new Date(), { awareOfUnicodeTokens: true });
 
-        if ((0, _isValid2.default)(parsedDate)) {
-          this.localDate = (0, _parse2.default)(this.value, this.dateFormat, new Date(), { awareOfUnicodeTokens: true });
-        } else {
-          _vue2.default.util.warn('The datepicker value is not a valid date. Given value: ' + this.value + ', format: ' + this.dateFormat);
-        }
+        this.localDate = (0, _parse2.default)(this.value, this.dateFormat, new Date(), { awareOfUnicodeTokens: true });
       } else {
         _vue2.default.util.warn('The datepicker value is not a valid date. Given value: ' + this.value);
       }
