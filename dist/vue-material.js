@@ -5959,13 +5959,13 @@ exports.default = {
       return _typeof(this.value) === 'object' && this.value instanceof Date && (0, _isValid2.default)(this.value);
     },
     localString: function localString() {
-      return this.localDate && (0, _format2.default)(this.localDate, this.dateFormat, { awareOfUnicodeTokens: true });
+      return this.localDate && (0, _format2.default)(this.localDate, this.dateFormat);
     },
     localNumber: function localNumber() {
       return this.localDate && Number(this.localDate);
     },
     parsedInputDate: function parsedInputDate() {
-      var parsedDate = (0, _parse2.default)(this.inputDate, this.dateFormat, new Date(), { awareOfUnicodeTokens: true });
+      var parsedDate = (0, _parse2.default)(this.inputDate, this.dateFormat, new Date());
       return parsedDate && (0, _isValid2.default)(parsedDate) ? parsedDate : null;
     },
     pattern: function pattern() {
@@ -6022,7 +6022,7 @@ exports.default = {
     },
     dateFormat: function dateFormat() {
       if (this.localDate) {
-        this.inputDate = (0, _format2.default)(this.inputDate, this.dateFormat, { awareOfUnicodeTokens: true });
+        this.inputDate = (0, _format2.default)(this.inputDate, this.dateFormat);
       }
     }
   },
@@ -6061,10 +6061,9 @@ exports.default = {
       } else if (this.isModelTypeDate) {
         this.localDate = this.value;
       } else if (this.isModelTypeString) {
-        var parsedDate = (0, _parse2.default)(this.value, this.dateFormat, new Date(), { awareOfUnicodeTokens: true });
-
+        var parsedDate = (0, _parse2.default)(this.value, this.dateFormat, new Date());
         if ((0, _isValid2.default)(parsedDate)) {
-          this.localDate = (0, _parse2.default)(this.value, this.dateFormat, new Date(), { awareOfUnicodeTokens: true });
+          this.localDate = (0, _parse2.default)(this.value, this.dateFormat, new Date());
         } else {
           _vue2.default.util.warn('The datepicker value is not a valid date. Given value: ' + this.value + ', format: ' + this.dateFormat);
         }

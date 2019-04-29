@@ -32,7 +32,6 @@
   import MdDebounce from 'core/utils/MdDebounce'
   import MdField from 'components/MdField/MdField'
   import MdInput from 'components/MdField/MdInput/MdInput'
-
   export default {
     name: 'MdDatepicker',
     components: {
@@ -110,13 +109,13 @@
         return typeof this.value === 'object' && this.value instanceof Date && isValid(this.value)
       },
       localString () {
-        return this.localDate && format(this.localDate, this.dateFormat, { awareOfUnicodeTokens: true })
+        return this.localDate && format(this.localDate, this.dateFormat)
       },
       localNumber () {
         return this.localDate && Number(this.localDate)
       },
       parsedInputDate () {
-        const parsedDate = parse(this.inputDate, this.dateFormat, new Date(), { awareOfUnicodeTokens: true })
+        const parsedDate = parse(this.inputDate, this.dateFormat, new Date())
         return parsedDate && isValid(parsedDate) ? parsedDate : null
       },
       pattern () {
@@ -172,7 +171,7 @@
       },
       dateFormat () {
         if (this.localDate) {
-          this.inputDate = format(this.inputDate, this.dateFormat, { awareOfUnicodeTokens: true })
+          this.inputDate = format(this.inputDate, this.dateFormat)
         }
       }
     },
@@ -211,10 +210,9 @@
         } else if (this.isModelTypeDate) {
           this.localDate = this.value
         } else if (this.isModelTypeString) {
-          let parsedDate = parse(this.value, this.dateFormat, new Date(), { awareOfUnicodeTokens: true })
-
+          let parsedDate = parse(this.value, this.dateFormat, new Date())
           if (isValid(parsedDate)) {
-            this.localDate = parse(this.value, this.dateFormat, new Date(), { awareOfUnicodeTokens: true })
+            this.localDate = parse(this.value, this.dateFormat, new Date())
           } else {
             Vue.util.warn(`The datepicker value is not a valid date. Given value: ${this.value}, format: ${this.dateFormat}`)
           }
@@ -232,26 +230,21 @@
 <style lang="scss">
   @import "~components/MdAnimation/variables";
   @import "~components/MdLayout/mixins";
-
   .md-datepicker-overlay {
     opacity: 0;
-
     @include md-layout-xsmall {
       opacity: 1;
     }
   }
-
   .md-datepicker {
     &.md-native {
       label {
         top: 0 !important;
       }
     }
-
     .md-date-icon {
       cursor: pointer;
     }
-
     input[type=date]::-webkit-clear-button,
     input[type=date]::-webkit-inner-spin-button,
     input[type=date]::-webkit-calendar-picker-indicator {
