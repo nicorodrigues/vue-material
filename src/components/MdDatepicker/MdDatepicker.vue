@@ -24,6 +24,7 @@
   import isFirefox from 'is-firefox'
   import format from 'date-fns/format'
   import parse from 'date-fns/parse'
+  import isValid from 'date-fns/isValid'
   import MdPropValidator from 'core/utils/MdPropValidator'
   import MdOverlay from 'components/MdOverlay/MdOverlay'
   import MdDatepickerDialog from './MdDatepickerDialog'
@@ -83,7 +84,7 @@
           : 'date'
       },
       dateFormat () {
-        return this.locale.dateFormat || 'yyyy-MM-DD'
+        return this.locale.dateFormat || 'YYYY-MM-DD'
       },
       modelType () {
         if (this.isModelTypeString) {
@@ -106,22 +107,22 @@
         return Number.isInteger(this.value) && this.value >= 0
       },
       isModelTypeDate () {
-        return typeof this.value === 'object' && this.value instanceof Date
+        return typeof this.value === 'object' && this.value instanceof Date && isValid(this.value)
       },
       localString () {
-        return this.localDate && format(this.localDate, this.dateFormat, {awareOfUnicodeTokens: true})
+        return this.localDate && format(this.localDate, this.dateFormat, { awareOfUnicodeTokens: true })
       },
       localNumber () {
         return this.localDate && Number(this.localDate)
       },
       parsedInputDate () {
-        const parsedDate = parse(this.inputDate, this.dateFormat, new Date(), {awareOfUnicodeTokens: true})
-        return parsedDate || null
+        const parsedDate = parse(this.inputDate, this.dateFormat, new Date(), { awareOfUnicodeTokens: true })
+        return parsedDate && isValid(parsedDate) ? parsedDate : null
       },
       pattern () {
-        return this.dateFormat.replace(/yyyy|MM|DD/g, match => {
+        return this.dateFormat.replace(/YYYY|MM|DD/g, match => {
           switch (match) {
-          case 'yyyy':
+          case 'YYYY':
             return '[0-9]{4}'
           case 'MM':
           case 'DD':
@@ -171,7 +172,7 @@
       },
       dateFormat () {
         if (this.localDate) {
-          this.inputDate = format(this.inputDate, this.dateFormat, {awareOfUnicodeTokens: true})
+          this.inputDate = format(this.inputDate, this.dateFormat, { awareOfUnicodeTokens: true })
         }
       }
     },
@@ -210,9 +211,13 @@
         } else if (this.isModelTypeDate) {
           this.localDate = this.value
         } else if (this.isModelTypeString) {
-          let parsedDate = parse(this.value, this.dateFormat, new Date(), {awareOfUnicodeTokens: true})
+          let parsedDate = parse(this.value, this.dateFormat, new Date(), { awareOfUnicodeTokens: true })
 
-            this.localDate = parse(this.value, this.dateFormat, new Date(), {awareOfUnicodeTokens: true})
+          if (isValid(parsedDate)) {
+            this.localDate = parse(this.value, this.dateFormat, new Date(), { awareOfUnicodeTokens: true })
+          } else {
+            Vue.util.warn(`The datepicker value is not a valid date. Given value: ${this.value}, format: ${this.dateFormat}`)
+          }
         } else {
           Vue.util.warn(`The datepicker value is not a valid date. Given value: ${this.value}`)
         }

@@ -51,7 +51,7 @@
 
       return {
         date: now,
-        string: format(now, dateFormat),
+        string: format(now, dateFormat, { awareOfUnicodeTokens: true }),
         number: Number(now),
         dynamicByModel: now,
         mdTypeValue: 'date',
@@ -103,7 +103,7 @@
           break
 
         case 'string':
-          this.dynamicByModel = parse(this.dynamicByModel, this.dateFormat, new Date())
+          this.dynamicByModel = parse(this.dynamicByModel, this.dateFormat, new Date(), { awareOfUnicodeTokens: true })
           break
 
         case 'number':
@@ -113,7 +113,7 @@
       },
       toString () {
         this.toDate()
-        this.dynamicByModel = this.dynamicByModel && format(this.dynamicByModel, this.dateFormat)
+        this.dynamicByModel = this.dynamicByModel && format(this.dynamicByModel, this.dateFormat, { awareOfUnicodeTokens: true })
       },
       toNumber () {
         this.toDate()
