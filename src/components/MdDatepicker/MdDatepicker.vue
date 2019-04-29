@@ -172,7 +172,7 @@
       },
       dateFormat () {
         if (this.localDate) {
-          this.inputDate = format(this.inputDate, this.dateFormat)
+          this.inputDate = format(this.inputDate, this.dateFormat, {awareOfUnicodeTokens: true})
         }
       }
     },
