@@ -211,10 +211,10 @@
         } else if (this.isModelTypeDate) {
           this.localDate = this.value
         } else if (this.isModelTypeString) {
-          let parsedDate = parse(this.value, this.dateFormat, new Date())
+          let parsedDate = parse(this.value, this.dateFormat, new Date(), {awareOfUnicodeTokens: true})
 
           if (isValid(parsedDate)) {
-            this.localDate = parse(this.value, this.dateFormat, new Date())
+            this.localDate = parse(this.value, this.dateFormat, new Date(), {awareOfUnicodeTokens: true})
           } else {
             Vue.util.warn(`The datepicker value is not a valid date. Given value: ${this.value}, format: ${this.dateFormat}`)
           }
