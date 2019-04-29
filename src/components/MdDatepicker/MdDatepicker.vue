@@ -110,7 +110,7 @@
         return typeof this.value === 'object' && this.value instanceof Date && isValid(this.value)
       },
       localString () {
-        return this.localDate && format(this.localDate, this.dateFormat)
+        return this.localDate && format(this.localDate, this.dateFormat, {awareOfUnicodeTokens: true})
       },
       localNumber () {
         return this.localDate && Number(this.localDate)

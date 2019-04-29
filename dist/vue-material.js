@@ -5959,7 +5959,7 @@ exports.default = {
       return _typeof(this.value) === 'object' && this.value instanceof Date && (0, _isValid2.default)(this.value);
     },
     localString: function localString() {
-      return this.localDate && (0, _format2.default)(this.localDate, this.dateFormat);
+      return this.localDate && (0, _format2.default)(this.localDate, this.dateFormat, { awareOfUnicodeTokens: true });
     },
     localNumber: function localNumber() {
       return this.localDate && Number(this.localDate);
@@ -6022,7 +6022,7 @@ exports.default = {
     },
     dateFormat: function dateFormat() {
       if (this.localDate) {
-        this.inputDate = (0, _format2.default)(this.inputDate, this.dateFormat);
+        this.inputDate = (0, _format2.default)(this.inputDate, this.dateFormat, { awareOfUnicodeTokens: true });
       }
     }
   },
